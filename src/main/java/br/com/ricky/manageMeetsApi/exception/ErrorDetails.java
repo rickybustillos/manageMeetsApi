@@ -1,15 +1,13 @@
 package br.com.ricky.manageMeetsApi.exception;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 import java.util.Date;
 
-@Data
+@Getter
 @AllArgsConstructor
-@NoArgsConstructor
-public class ErrorDetails extends Exception {
+public class ErrorDetails {
 
     private Date timestamp;
     private String message;
