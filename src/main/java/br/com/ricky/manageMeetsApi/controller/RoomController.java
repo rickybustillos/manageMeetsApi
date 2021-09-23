@@ -27,11 +27,11 @@ public class RoomController {
     }
 
     @GetMapping("/rooms/{id}")
-    public ResponseEntity<Room> getById(@PathVariable Long roomId) throws ResourceNotFoundException {
+    public ResponseEntity<Room> getById(@PathVariable Long id) throws ResourceNotFoundException {
         // Searching room by ID, if it returns an error it will return an Exception
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new ResourceNotFoundException("Room not found with ID " + roomId));
-        return ResponseEntity.ok(room);
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with ID " + id));
+        return ResponseEntity.ok().body(room);
     }
 
     @PostMapping("/rooms")
@@ -40,10 +40,10 @@ public class RoomController {
     }
 
     @PutMapping("/rooms/{id}")
-    public ResponseEntity<Room> update(@PathVariable Long roomId, @Valid @RequestBody Room roomDetails) throws ResourceNotFoundException {
+    public ResponseEntity<Room> update(@PathVariable Long id, @RequestBody @Valid Room roomDetails) throws ResourceNotFoundException {
         // Searching room by ID, if it returns an error it will return an Exception
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new ResourceNotFoundException("Room not found with ID " + roomId));
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with ID " + id));
 
         // If all it's ok, will update the room found with the new values
         room.setName(roomDetails.getName());
@@ -58,9 +58,9 @@ public class RoomController {
     }
 
     @DeleteMapping("/rooms/{id}")
-    public Map<String, Boolean> delete(@PathVariable Long roomId) throws ResourceNotFoundException {
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new ResourceNotFoundException("Room not found with ID "+ roomId));
+    public Map<String, Boolean> delete(@PathVariable Long id) throws ResourceNotFoundException {
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with ID "+ id));
 
         // If all it's ok, will delete the room
         roomRepository.delete(room);
