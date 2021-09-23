@@ -2,13 +2,15 @@ package br.com.ricky.manageMeetsApi.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Data
 @AllArgsConstructor
-@Table(name = "tb_meetingroom")
+@NoArgsConstructor
+@Table(name = "meetingroom")
 public class Room {
 
     @Id()
