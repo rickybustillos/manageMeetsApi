@@ -1,16 +1,24 @@
 package br.com.ricky.manageMeetsApi.controller;
 
+import br.com.ricky.manageMeetsApi.dto.RoomDTO;
 import br.com.ricky.manageMeetsApi.exception.ResourceNotFoundException;
-import br.com.ricky.manageMeetsApi.model.Room;
-import br.com.ricky.manageMeetsApi.repository.RoomRepository;
 import br.com.ricky.manageMeetsApi.service.RoomService;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -20,27 +28,28 @@ import java.util.Map;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class RoomController {
 
-    private RoomService roomService;
+    private final RoomService roomService;
 
     @GetMapping("/rooms")
-    public List<Room> getAll() {
+    public List<RoomDTO> getAll() {
         return roomService.getAll();
     }
 
     @GetMapping("/rooms/{id}")
-    public ResponseEntity<Room> getById(@PathVariable Long id) throws ResourceNotFoundException {
-        var room = roomService.getById(id);
-        return ResponseEntity.ok().body(room);
+    public ResponseEntity<RoomDTO> getById(@PathVariable Long id) throws ResourceNotFoundException {
+        var roomDTO = roomService.getById(id);
+        return ResponseEntity.ok().body(roomDTO);
     }
 
     @PostMapping("/rooms")
-    public Room create(@Valid @RequestBody Room room) {
-        return roomService.create(room);
+    @ResponseStatus(HttpStatus.CREATED)
+    public RoomDTO create(@Valid @RequestBody RoomDTO roomDTO) {
+        return roomService.create(roomDTO);
     }
 
     @PutMapping("/rooms/{id}")
-    public ResponseEntity<Room> update(@PathVariable Long id, @RequestBody @Valid Room roomDetails) throws ResourceNotFoundException {
-        var updatedRoom = roomService.update(id, roomDetails);
+    public ResponseEntity<RoomDTO> update(@PathVariable Long id, @RequestBody @Valid RoomDTO roomDTO) throws ResourceNotFoundException {
+        var updatedRoom = roomService.update(id, roomDTO);
         return ResponseEntity.ok(updatedRoom);
     }
 
