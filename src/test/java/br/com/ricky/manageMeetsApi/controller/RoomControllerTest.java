@@ -62,4 +62,16 @@ public class RoomControllerTest {
                 .andExpect(jsonPath("$.endHour", is(roomDTO.getEndHour().toString())));
     }
 
+    @Test
+    void whenPOSTIsCalledWithoutRequiredFieldThenErrorIsReturned() throws Exception {
+        // Given
+        RoomDTO roomDTO = RoomDTOBuilder.builder().build().toRoomDTO();
+        roomDTO.setName(null);
+
+        // Then
+        mockMvc.perform(post(ROOM_API_URL_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(roomDTO)))
+                .andExpect(status().isBadRequest());
+    }
 }
