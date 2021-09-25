@@ -56,7 +56,6 @@ public class RoomServiceTest {
     void whenNotFoundThenAnExceptionShouldBeThrown() {
         // Given
         RoomDTO expectedRoomDTO = RoomDTOBuilder.builder().build().toRoomDTO();
-        List<Room> expectedSavedRoom = List.of(roomMapper.toModel(expectedRoomDTO));
 
         // When
         Mockito.when(roomRepository.findById(expectedRoomDTO.getId())).thenReturn(Optional.empty());
