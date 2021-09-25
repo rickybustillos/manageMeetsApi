@@ -12,9 +12,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 @ExtendWith(MockitoExtension.class)
 public class RoomServiceTest {
@@ -32,17 +32,18 @@ public class RoomServiceTest {
     @Test
     void whenRoomInformedThenItShouldBeCreated() {
         // Given
-        RoomDTO roomDTO = RoomDTOBuilder.builder().build().toRoomDTO();
-        Room expectedSavedRoom = roomMapper.toModel(roomDTO);
+        RoomDTO expectedRoomDTO = RoomDTOBuilder.builder().build().toRoomDTO();
+        Room expectedSavedRoom = roomMapper.toModel(expectedRoomDTO);
 
         // When
         Mockito.when(roomRepository.save(expectedSavedRoom)).thenReturn(expectedSavedRoom);
 
         // Then
-        RoomDTO createdRoomDTO = roomService.create(roomDTO);
+        RoomDTO createdRoomDTO = roomService.create(expectedRoomDTO);
 
-        assertEquals(roomDTO.getId(), createdRoomDTO.getId());
-        assertEquals(roomDTO.getName(), createdRoomDTO.getName());
+        assertThat(createdRoomDTO.getId(), is(equalTo(expectedRoomDTO.getId())));
+        assertThat(createdRoomDTO.getName(), is(equalTo(expectedRoomDTO.getName())));
+        assertThat(createdRoomDTO.getDate(), is(equalTo(expectedRoomDTO.getDate())));
     }
 
 }
