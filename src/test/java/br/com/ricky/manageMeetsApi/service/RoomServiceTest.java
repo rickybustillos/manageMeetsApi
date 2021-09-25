@@ -2,6 +2,7 @@ package br.com.ricky.manageMeetsApi.service;
 
 import br.com.ricky.manageMeetsApi.builder.RoomDTOBuilder;
 import br.com.ricky.manageMeetsApi.dto.RoomDTO;
+import br.com.ricky.manageMeetsApi.exception.ResourceNotFoundException;
 import br.com.ricky.manageMeetsApi.mapper.RoomMapper;
 import br.com.ricky.manageMeetsApi.model.Room;
 import br.com.ricky.manageMeetsApi.repository.RoomRepository;
@@ -12,9 +13,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class RoomServiceTest {
@@ -44,6 +50,19 @@ public class RoomServiceTest {
         assertThat(createdRoomDTO.getId(), is(equalTo(expectedRoomDTO.getId())));
         assertThat(createdRoomDTO.getName(), is(equalTo(expectedRoomDTO.getName())));
         assertThat(createdRoomDTO.getDate(), is(equalTo(expectedRoomDTO.getDate())));
+    }
+
+    @Test
+    void whenNotFoundThenAnExceptionShouldBeThrown() {
+        // Given
+        RoomDTO expectedRoomDTO = RoomDTOBuilder.builder().build().toRoomDTO();
+        List<Room> expectedSavedRoom = List.of(roomMapper.toModel(expectedRoomDTO));
+
+        // When
+        Mockito.when(roomRepository.findById(expectedRoomDTO.getId())).thenReturn(Optional.empty());
+
+        // Then
+        assertThrows(ResourceNotFoundException.class, () -> roomService.getById(expectedRoomDTO.getId()));
     }
 
 }
