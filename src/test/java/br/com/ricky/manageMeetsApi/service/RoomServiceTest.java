@@ -13,8 +13,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -62,6 +60,21 @@ public class RoomServiceTest {
 
         // Then
         assertThrows(ResourceNotFoundException.class, () -> roomService.getById(expectedRoomDTO.getId()));
+    }
+
+    @Test
+    void whenValidRoomIdIsGivenThenReturnARoom() throws ResourceNotFoundException {
+        // Given
+        RoomDTO expectedRoomDTO = RoomDTOBuilder.builder().build().toRoomDTO();
+        Room expectedFoundedRoom = roomMapper.toModel(expectedRoomDTO);
+
+        // When
+        Mockito.when(roomRepository.findById(expectedRoomDTO.getId())).thenReturn(Optional.of(expectedFoundedRoom));
+
+        // Then
+        RoomDTO foundRoomDTO = roomService.getById(expectedRoomDTO.getId());
+
+        assertThat(foundRoomDTO, is(equalTo(expectedRoomDTO)));
     }
 
 }
